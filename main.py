@@ -33,33 +33,44 @@ class Char:
 
 
 def main():
-    fighter1 = Char(15,10,11,16,11,14,6,8,15,30)
-    
-    fighter2 = Char(15,10,11,16,11,14,6,8,15,30)
-    
-    flag = 0
-    while(fighter1.hpts>0 and fighter2.hpts>0):
-        if(flag):
-            to_hit = fighter2.to_hit()
-            if(to_hit > fighter1.full_ac()):
-                damage = fighter2.wpn_damage()
-                fighter1.take_damage(damage)
-                print("Fighter 2 hits dealing %d damage! Fighter 1 has %d hitpoints left") % (damage, fighter1.hpts)
-            else:
-                print("Fighter 2 swings and misses")
+    N_fights = 1000
+    f1_wins = 0
+    f2_wins = 0
+    i = 0
+
+    while(i < N_fights):
+        fighter1 = Char(15,10,11,16,11,14,6,8,15,30)
+        fighter2 = Char(15,10,11,16,11,14,6,8,15,30)
+        init1 = fighter1.initiative()
+        init2 = fighter2.initiative()
+        
+        if(init1 > init2):
             flag = 0
         else:
-            to_hit = fighter1.to_hit()
-            if(to_hit > fighter2.full_ac()):
-                fighter2.take_damage(fighter1.wpn_damage())
-                print ("Fighter 1 hits dealing %d damage! Fighter 2 has %d hitpoints left") % (fighter1.wpn_damage(), fighter2.hpts)
-            else:
-                print ("Fighter 1 swings and misses")
             flag = 1
-
-    if(fighter1.hpts>0):
-        print("Fighter 1 wins")
-    else:
-        print("Fighter 2 wins")
-
+        while(fighter1.hpts>0 and fighter2.hpts>0):
+            if(flag):
+                to_hit = fighter2.to_hit()
+                if(to_hit > fighter1.full_ac()):
+                    damage = fighter2.wpn_damage()
+                    fighter1.take_damage(damage)
+                #    print("Fighter 2 hits dealing %d damage! Fighter 1 has %d hitpoints left") % (damage, fighter1.hpts)
+                #else:
+                #    print("Fighter 2 swings and misses")
+                flag = 0
+            else:
+                to_hit = fighter1.to_hit()
+                if(to_hit > fighter2.full_ac()):
+                    damage = fighter1.wpn_damage()
+                    fighter2.take_damage(damage)
+#                print ("Fighter 1 hits dealing %d damage! Fighter 2 has %d hitpoints left") % (fighter1.wpn_damage(), fighter2.hpts)
+#            else:
+#                print ("Fighter 1 swings and misses")
+                flag = 1
+        if(fighter1.hpts>0):
+            f1_wins += 1
+        else:
+            f2_wins += 1
+        i += 1
+    print("Fighter 1: %d\nFighter 2: %d") % (f1_wins,f2_wins)
 main()
